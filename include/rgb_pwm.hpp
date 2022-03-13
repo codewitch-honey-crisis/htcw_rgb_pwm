@@ -90,9 +90,18 @@ namespace arduino {
             }
         };
         template<size_t Index,typename... RgbPwmGroups> struct rgb_pwm_fetch_group {
+            // HACK: this makes it compile
+            using group = rgb_pwm_fetch_group;
+            using pixel_type = gfx::rgb_pixel<16>;
+            static void write_pixel(pixel_type color) {
+
+            }
+            static void read_pixel(pixel_type* out_color) {
+                
+            }
         };
         template<size_t Index,typename RgbPwmGroup,typename... RgbPwmGroups> struct rgb_pwm_fetch_group<Index,RgbPwmGroup,RgbPwmGroups...> {
-            using group = rgb_pwm_fetch_group<Index-1,RgbPwmGroups...>;
+            using group = typename rgb_pwm_fetch_group<Index-1,RgbPwmGroups...>::group;
         };
         template<typename RgbPwmGroup,typename... RgbPwmGroups> struct rgb_pwm_fetch_group<0,RgbPwmGroup,RgbPwmGroups...> {
             using group = RgbPwmGroup;
@@ -107,23 +116,63 @@ namespace arduino {
     private:
         bool m_initialized;
         void set_pixel(int group,pixel_type color) {
+            using g0 = typename rgb_pwm_helpers::rgb_pwm_fetch_group<0,RgbPwmGroups...>::group;
+            using g1 = typename rgb_pwm_helpers::rgb_pwm_fetch_group<1,RgbPwmGroups...>::group;
+            using g2 = typename rgb_pwm_helpers::rgb_pwm_fetch_group<2,RgbPwmGroups...>::group;
+            using g3 = typename rgb_pwm_helpers::rgb_pwm_fetch_group<3,RgbPwmGroups...>::group;
+            using g4 = typename rgb_pwm_helpers::rgb_pwm_fetch_group<4,RgbPwmGroups...>::group;
+            typename g0::pixel_type px0;
+            typename g1::pixel_type px1;
+            typename g2::pixel_type px2;
+            typename g3::pixel_type px3;
+            typename g4::pixel_type px4;
             switch(group%5) {
                 case 0:
-                    using g0 = typename rgb_pwm_helpers::rgb_pwm_fetch_group<0,RgbPwmGroups...>::group;
-                    typename g0::pixel_type px;
-                    gfx::convert(color,&px);
-                    g0::write_pixel(px);
+                    gfx::convert(color,&px0);
+                    g0::write_pixel(px0);
+                    break;
+                case 1:
+                    gfx::convert(color,&px1);
+                    g1::write_pixel(px1);
+                    break;
+                case 2:
+                    gfx::convert(color,&px2);
+                    g2::write_pixel(px2);
+                    break;
+                case 3:
+                    gfx::convert(color,&px3);
+                    g3::write_pixel(px3);
+                    break;
+                case 4:
+                    gfx::convert(color,&px4);
+                    g4::write_pixel(px4);
                     break;
             }
+        }
+        template<int Group>
+        void get_pixel_helper(pixel_type* out_color) {
+            using g = typename rgb_pwm_helpers::rgb_pwm_fetch_group<Group,RgbPwmGroups...>::group;
+            typename g::pixel_type px;
+            g::read_pixel(&px);
+            gfx::convert(px,out_color);
         }
         void get_pixel(int group,pixel_type* out_color) {
             if(!out_color) { return; }
             switch(group%5) {
                 case 0:
-                    using g0 = typename rgb_pwm_helpers::rgb_pwm_fetch_group<0,RgbPwmGroups...>::group;
-                    typename g0::pixel_type px;
-                    g0::read_pixel(&px);
-                    gfx::convert(px,out_color);
+                    get_pixel_helper<0>(out_color);
+                    break;
+                case 1:
+                    get_pixel_helper<1>(out_color);
+                    break;
+                case 2:
+                    get_pixel_helper<2>(out_color);
+                    break;
+                case 3:
+                    get_pixel_helper<3>(out_color);
+                    break;
+                case 4:
+                    get_pixel_helper<4>(out_color);
                     break;
             }
         }

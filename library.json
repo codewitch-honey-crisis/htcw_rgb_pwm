@@ -1,6 +1,6 @@
 {
     "name": "htcw_rgb_pwm",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Provides support for up to 16 PWM channels as a display device w/ GFX",
     "keywords": ["RGB","PWM","LED","graphics","drawing"],
     "authors": {
