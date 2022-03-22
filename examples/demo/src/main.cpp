@@ -3,7 +3,14 @@
 #include <gfx_cpp14.hpp>
 using namespace arduino;
 using namespace gfx;
-rgb_pwm<rgb_pwm_group<pwm_traits<32,0>,pwm_traits<25,1>,pwm_traits<26,2>>> p;
+rgb_pwm<
+  rgb_pwm_group<
+    pwm_traits<32,0>,
+    pwm_traits<25,1>,
+    pwm_traits<26,2>
+  >
+> p;
+
 uint8_t r = 0;
 int rd = 1;
 uint8_t g = 127;
