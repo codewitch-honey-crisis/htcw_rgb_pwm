@@ -217,7 +217,7 @@ namespace arduino {
             pixel_type px;
             return fill(bounds,px);
         }
-        gfx::gfx_result point(gfx::point16 location,pixel_type* out_color) {
+        gfx::gfx_result point(gfx::point16 location,pixel_type* out_color) const {
             if(!initialized()) {
                 return gfx::gfx_result::invalid_state;
             }
