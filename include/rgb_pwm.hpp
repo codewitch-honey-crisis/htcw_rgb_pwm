@@ -150,13 +150,13 @@ namespace arduino {
             }
         }
         template<int Group>
-        void get_pixel_helper(pixel_type* out_color) {
+        void get_pixel_helper(pixel_type* out_color) const {
             using g = typename rgb_pwm_helpers::rgb_pwm_fetch_group<Group,RgbPwmGroups...>::group;
             typename g::pixel_type px;
             g::read_pixel(&px);
             gfx::convert(px,out_color);
         }
-        void get_pixel(int group,pixel_type* out_color) {
+        void get_pixel(int group,pixel_type* out_color) const {
             if(!out_color) { return; }
             switch(group%5) {
                 case 0:
