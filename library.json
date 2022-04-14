@@ -1,6 +1,6 @@
 {
     "name": "htcw_rgb_pwm",
-    "version": "1.0.8",
+    "version": "1.0.9",
     "description": "Provides support for up to 16 PWM channels as a display device w/ GFX",
     "keywords": ["RGB","PWM","LED","graphics","drawing"],
     "authors": {
@@ -20,7 +20,7 @@
         "url": "https://github.com/codewitch-honey-crisis/htcw_rgb_pwm.git"
     },
     "dependencies": {
-        "codewitch-honey-crisis/htcw_gfx": "^1.1.0"
+        "codewitch-honey-crisis/htcw_gfx": "^1.1.1"
     },
     "examples": [
         {
